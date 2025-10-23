@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+html {
+    font-size: 62.5%; /* 62.5% of 16px = 10px */
+
+}
+
+
+*{
+    font-family: "Baloo Bhai 2", sans-serif;
+    /* font-size: 2.4rem; */
+}
+/* text2rem */
+/* px-5 py-2 */
+/* bg-blue-200 border border-blue-300 rounded-4xl text-[1.5rem] px-3 py-1 cursor-pointer hover:bg-blue-400 hover:border-blue-600 transition-all */
+.my-button {
+  background-color: #bfdbfe;       /* bg-blue-200 */
+  border: 1px solid #93c5fd;       /* border border-blue-300 */
+  border-radius: 20px;             /* rounded-4xl → 2rem = 20px */
+  cursor: pointer;                 /* cursor-pointer */
+  transition: all 0.3s ease;       /* transition-all */
+}
+
+.my-button:hover {
+  background-color: #60a5fa;
+
+}
+/* 
+import { useState, useEffect, useRef } 
+from 'react' import Navbar from './components/Navbar' import './App.css' function App() { const [todo, settodo] = useState("") const [todos, settodos] = useState([]) const handleAdd=()=>{ settodos([...todos, {todo,isCompleted: false} ]) } const handleEdit=()=>{ } const handleDelete=()=>{ } const handleChange = (e)=>{ settodo(e.target.value) } return ( <> <Navbar/> <div className="container mx-auto bg-purple-100 mt-[2rem] h-[80vh] rounded-3xl "> <h1 className='flex justify-center p-5 font-semibold text-[2.4rem]'>justDo - Manage your todos at one place</h1> <div className="addtodo mx-10 font-medium text-[2.4rem]"> <span>Add a Todo</span> </div> <div className="addsave flex gap-7 justify-center my-4"> <input className='border border-pink-300 bg-pink-100 rounded-4xl w-[68rem] h-18 text-[1.8rem] px-4 hover:bg-pink-200 hover:border-pink-400 transition-all' onChange={handleChange} value={todo} type="text"  /> <button onClick={handleAdd} className='my-button text-[2rem] px-5 py-2'>Save</button> </div> <div className="showfinish flex  "> <input id='showfinish' className='addtodo ml-10 my-5 cursor-pointer' type="checkbox" /> <label htmlFor="showfinish" className='text-[1.6rem] px-3 cursor-pointer flex items-center'>Show Finished Tasks</label> </div> <div className="line bg-slate-400 w-[40vw] h-[1px] mx-auto my-4"> </div> <div className="yourtodos mx-10 my-6 text-[2.4rem]"> <span className='font-medium'>Your Todos</span> {todos.map((item,index)=>{ return <div key={index} className="list flex justify-between items-center"> <div className="inplabel flex"> <input id={index} className='addtodo  my-5 cursor-pointer' type="checkbox" /> <label htmlFor={index} className='text-[1.6rem] px-3 cursor-pointer flex items-center'>{item.todo}</label> </div> <div className="buttons flex gap-2 items-center"> <button onClick={handleEdit} className='my-button text-[1.5rem] px-3 py-1'>Edit</button> <button onClick={handleDelete} className='my-button text-[1.5rem] px-3 py-1'>Delete</button> </div> </div> })} </div> </div> </> ) } export default App
+*/
