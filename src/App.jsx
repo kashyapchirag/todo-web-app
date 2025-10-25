@@ -3,146 +3,144 @@ import Navbar from './components/Navbar'
 import './App.css'
 import { v4 as uuidv4 } from 'uuid';
 
-
-function App() {
-
-  const [todo, settodo] = useState("")
-  const [todos, settodos] = useState([])
-  const [seecompleted, setseecompleted] = useState(true)
+  function App() {
+  const [todo, setTodo] = useState("")
+  const [todos, setTodos] = useState([])
+  const [checked, setchecked] = useState(true)
 
 
-  const handleCheckbox = (e) => {
-
-    let id = e.target.name;
-    let newtodos=todos.map(element=>{
-      if(element.id===id){
-        element.isCompleted=!element.isCompleted
-        console.log(element);
-      }
-      return element
-    })
-    settodos(newtodos)
-    
-    
-    
-  }
-  
   const handleChange = (e) => {
-    settodo(e.target.value)
+    setTodo(e.target.value)
+  
   }
 
   const handleAdd = () => {
-    if(todo.trim()==="" ){
-      alert("dont be oversmart")
+
+    if(todo.trim()===""){
+      alert("enter something buddy")
+      setTodo("");
       return;
     }
-    settodos([...todos,{todo, id : uuidv4(), isCompleted:false}])
-    settodo("")
-  }
-  
-  const handleEdit = (e) => {
-    let id = e.target.name;
-    let newtodos = todos.map(element=>{
-      if(element.id===id){
-        
-        let ask = prompt("enter the edited todo");
-        element.todo=ask;
-        
-      }
-      return element;
-    })
-    settodos(newtodos);
+    setTodos([...todos, {id:uuidv4(),todo,isCompleted:false}])
+    console.log(todos);
+    setTodo("")
+    
   }
 
-  const handleDelete = (e) => {
-    let ask = confirm("are you sure you want to delete this todo");
-    if (ask){
-      let id = e.target.name;
-      let newtodos = todos.filter(element=>{
-      if(element.id!==id){
-        
-        return true;
-        
-      }
-      })
-      settodos(newtodos);
+  const handleEnter = (e) => {
+    if(e.key == "Enter"){
+      handleAdd();
     }
   }
-  const handleFinish= () => {
-    setseecompleted(!seecompleted)
-    if (seecompleted===true){
-      let newtodos=todos.filter((element)=>{
-        if(element.isCompleted===true){
+  
+
+  const handleEdit = (e) => {
+    let id = e.target.name
+    let newtodos = todos.map(item=>{
+      if(item.id===id){
+        let edit = prompt("enter your edited task -")
+        item.todo=edit;
+      }
+      return item;
+    })
+    setTodos(newtodos)
+  }
+  const handleDelete = (e) => {
+    
+    if (confirm("do you wanna delete this task")){
+      let id = e.target.name
+      let newtodos = todos.filter(item=>{
+        if(item.id!==id){
           return true;
         }
       })
-      settodos(newtodos);
+      setTodos(newtodos)
     }
-      
-    }
+  }
 
+  const handleComplete = (e) => {
+    
+    let id = e.target.id
+    let newtodos=todos.map(item=>{
+      if(id===item.id){
 
+        item.isCompleted= !item.isCompleted
+      }
+      return item
+    })
+    setTodos(newtodos)
+  }
+
+  const handleFinishTasks = (e) => {
+    setchecked(!checked)
+  }
+  
   return ( 
     <>
     <Navbar/>
+    <div className="container bg-purple-200 h-[80vh] m-auto mt-8 rounded-4xl px-10 py-5 box-border">
+      <div className='title text-[2.8rem] text-center pb-5 font-medium'>justDo - Manage your todos at one place</div>
 
-    <div className="container mx-auto bg-purple-100 mt-[2rem] h-[80vh] rounded-3xl ">
-      <h1 className='flex justify-center p-5 font-semibold text-[2.4rem]'>justDo - Manage your todos at one place</h1>
-
-      <div className="addtodo mx-10 font-medium text-[2.4rem]">
-        <span>Add a Todo</span>
+      <div className='addATodo '>
+        <div className='text-[2.5rem] pb-4 '>Add a Todo</div>
+        <div className='flex gap-4 '>
+          <input onChange={handleChange} onKeyDown={handleEnter} value={todo} className='border text-[1.8rem] px-5 border-pink-300 bg-pink-200 rounded-4xl w-[90%] h-18' type="text" />
+          <button onClick={handleAdd} className='text-[2.2rem] my-button px-5'>Save</button>
+        </div>
       </div>
 
-      <div className="addsave flex gap-7 justify-center my-4">
-        <input onChange={handleChange} value={todo} className='border border-pink-300 bg-pink-100 rounded-4xl w-[68rem] h-18 text-[1.8rem] px-4 hover:bg-pink-200 hover:border-pink-400 transition-all' type="text"  />
-        <button onClick={handleAdd} className='my-button text-[2rem] px-5 py-2'>Save</button>
-      </div>
-
-      {todos.length!=0 && 
-      <div className="showfinish flex  ">
-        <input id='showfinish' 
-        // onChange={handleFinish}
-        checked={seecompleted} className='addtodo ml-10 my-5 cursor-pointer' type="checkbox" />
-        <label htmlFor="showfinish" className='text-[1.6rem] px-3 cursor-pointer flex items-center'>Show Finished Tasks</label>
+      {todos.length!=0 && <div className="showcomplete flex gap-3 items-center mt-8">
+        <input checked={checked} onChange={handleFinishTasks} type="checkbox" id='checkbox' />
+        <label htmlFor="checkbox" className='text-[1.8rem]'>Show finished Tasks</label>
       </div>}
 
+      <div className="line w-[50vw] mt-9 border m-auto border-slate-400 rounded-4xl"></div>
 
-      <div className="line bg-slate-400 w-[40vw] h-[1px] mx-auto my-4"> </div>
+      {todos.length==0 && <div className='text-[2.5rem] text-center pt-4'>No todos to display</div>}
 
-      {todos.length==0 && 
-      <div className='yourtodos mx-10 my-6 text-[2.4rem] font-medium'>No todos to display</div>
-      }
+      {todos.length!=0 && <div className="yourtodos flex flex-col gap-4">
+        <div className='text-[2.5rem] pb-4 pt-4 '>Your Todos</div>
 
-      {todos.length!=0 && <div className="yourtodos mx-10 my-6 text-[2.4rem]">
+        {todos.map(item=>{
+          if(checked){
 
-        <span className='font-medium'>Your Todos</span>
-
-        {
-          todos.map((item,index)=>{
+          return(
+          
+          <div key={item.id} className="all flex justify-between">
+            <div className="inputlabel flex items-center gap-3 text-[1.5rem]">
+              <input checked={item.isCompleted}  onChange={handleComplete} type="checkbox" id={item.id} />
+              <label name={item.id} className={item.isCompleted? "line-through":""} htmlFor={item.id}>{item.todo}</label>
+            </div>
+        
+            <div className="buttons flex text-[1.5rem] gap-3">
+              <button onClick={handleEdit} name={item.id} className="edit my-button px-5">Edit</button>
+              <button onClick={handleDelete} name={item.id} className="delete my-button px-5">Delete</button>
+            </div>
+          </div>) 
+          }else if(item.isCompleted!==true){
+            
             return(
-              <div key={index} className="list flex justify-between items-center">
-                <div className="inplabel flex">
-                  <input name={item.id} onChange={handleCheckbox} id={index} className='addtodo  my-5 cursor-pointer' type="checkbox" />
-                  <label htmlFor={index} className={`text-[1.6rem] px-3 cursor-pointer flex items-center ${item.isCompleted ? "line-through":""}`}>{item.todo}</label>
-                </div>
-
-                <div className="buttons flex gap-2 items-center">
-                  <button name={item.id} onClick={handleEdit} className='my-button text-[1.5rem] px-3 py-1'>Edit</button>
-                  <button name={item.id} onClick={handleDelete} className='my-button text-[1.5rem] px-3 py-1'>Delete</button>
-                </div>
-              </div>
+              
+              <div key={item.id} className="all flex justify-between">
+            <div className="inputlabel flex items-center gap-3 text-[1.5rem]">
+              <input checked={item.isCompleted}  onChange={handleComplete} type="checkbox" id={item.id} />
+              <label name={item.id} className={item.isCompleted? "line-through":""} htmlFor={item.id}>{item.todo}</label>
+            </div>
+        
+            <div className="buttons flex text-[1.5rem] gap-3">
+              <button onClick={handleEdit} name={item.id} className="edit my-button px-5">Edit</button>
+              <button onClick={handleDelete} name={item.id} className="delete my-button px-5">Delete</button>
+            </div>
+          </div>
             )
-          })
-        }
+          }
+          
+        })}
 
       </div>}
-      
-
     </div>
-
-
     </>
   ) 
 } 
-
 export default App
+
