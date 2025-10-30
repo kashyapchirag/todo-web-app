@@ -1,0 +1,7 @@
+@layer utilities {
+  @media (min-width: 1076px) and (max-width: 1280px) {
+    .min1076-max1280\:max-h-\[40vh\] {
+      @apply max-h-[40vh];
+    }
+  }
+}
