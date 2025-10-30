@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import Navbar from './components/Navbar'
 import './App.css'
+import { FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+
 import { v4 as uuidv4 } from 'uuid';
 
   function App() {
@@ -8,6 +11,21 @@ import { v4 as uuidv4 } from 'uuid';
   const [todo, setTodo] = useState("")
   const [todos, setTodos] = useState([])
   const [checked, setchecked] = useState(true)
+
+
+  const savetodo = () => {
+    localStorage.setItem("todos", JSON.stringify(todos))
+  }
+  
+  useEffect(() => {
+    let todostring=localStorage.getItem("todos")
+    if(todostring){
+      let todos=JSON.parse(todostring)
+      setTodos(todos)
+    }
+  
+  }, [])
+  
 
   const handleChange = (e) => {
     setTodo(e.target.value)
@@ -24,6 +42,7 @@ import { v4 as uuidv4 } from 'uuid';
     setTodos([...todos, {id:uuidv4(),todo,isCompleted:false}])
     console.log(todos);
     setTodo("")
+    savetodo()
     
   }
 
@@ -31,24 +50,26 @@ import { v4 as uuidv4 } from 'uuid';
     if(e.key == "Enter"){
       handleAdd();
     }
+    savetodo()
   }
   
   const handleEdit = (e) => {
-    let id = e.target.name
+    let id = e.currentTarget.name
     let newtodos = todos.map(item=>{
       if(item.id===id){
-        let edit = prompt("enter your edited task -")
+        let edit = prompt("enter your edited task -",item.todo)
         item.todo=edit;
       }
       return item;
     })
     setTodos(newtodos)
+    savetodo()
   }
 
   const handleDelete = (e) => {
     
     if (confirm("do you wanna delete this task")){
-      let id = e.target.name
+      let id = e.currentTarget.name
       let newtodos = todos.filter(item=>{
         if(item.id!==id){
           return true;
@@ -56,6 +77,7 @@ import { v4 as uuidv4 } from 'uuid';
       })
       setTodos(newtodos)
     }
+    savetodo()
   }
 
   const handleComplete = (e) => {
@@ -69,10 +91,12 @@ import { v4 as uuidv4 } from 'uuid';
       return item
     })
     setTodos(newtodos)
+    savetodo()
   }
 
   const handleFinishTasks = (e) => {
     setchecked(!checked)
+    savetodo()
   }
   
   return ( 
@@ -118,8 +142,8 @@ import { v4 as uuidv4 } from 'uuid';
                 </div>
             
                 <div className="buttons flex text-[1.5rem] gap-3">
-                  <button onClick={handleEdit} name={item.id} className="edit my-button px-5">Edit</button>
-                  <button onClick={handleDelete} name={item.id} className="delete my-button px-5">Delete</button>
+                  <button onClick={handleEdit} name={item.id} className="edit my-button px-3"><FaRegEdit /></button>
+                  <button onClick={handleDelete} name={item.id} className="delete my-button px-3"><MdDelete /></button>
                 </div>
               </div>) 
               }else if(item.isCompleted!==true){
@@ -133,8 +157,8 @@ import { v4 as uuidv4 } from 'uuid';
                 </div>
             
                 <div className="buttons flex text-[1.5rem] gap-3">
-                  <button onClick={handleEdit} name={item.id} className="edit my-button px-5">Edit</button>
-                  <button onClick={handleDelete} name={item.id} className="delete my-button px-5">Delete</button>
+                  <button onClick={handleEdit} name={item.id} className="edit my-button px-3"><FaRegEdit /></button>
+                  <button onClick={handleDelete} name={item.id} className="delete my-button px-3"><MdDelete /></button>
                 </div>
               </div>
                 )
@@ -142,8 +166,6 @@ import { v4 as uuidv4 } from 'uuid';
               
             })}
           </div>
-
-
         </div>}
       </div>
     </div>
